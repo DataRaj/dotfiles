@@ -1,0 +1,13 @@
+[kb]
+type = "coding"
+
+[[agents]]
+slot = 1
+kind = "gemini"
+name = "gemini"
+role = "free-text"
+model = ""
+provider = ""
+api_base = ""
+kb_scope = "shared"
+
