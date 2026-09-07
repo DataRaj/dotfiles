@@ -207,9 +207,21 @@ vim.keymap.set("n", "<leader>c[", "ct]", { desc = "Change till ]" })
 --   da(  da{  da[         — delete around (including the brackets)
 --   ca(  ca{  ca[         — change around
 
--- ── Delete to end of line → black hole (don't pollute yank register) ─────────
-vim.keymap.set("n", "<leader>D", '"_D', { desc = "Delete to EOL (no yank)" })
-vim.keymap.set("n", "<leader>dd", '"_dd', { desc = "Delete line (no yank)" })
+-- ── Delete without copying (black-hole register) ─────────────────────────────
+-- Normal and Visual mode: deleting via `d`, `dd`, `di(`, `dw`, `D`, `x`, etc.
+-- removes text without clobbering whatever you previously yanked/copied.
+-- If an explicit register is supplied (e.g. "a or "+), it respects that register.
+vim.keymap.set({ "n", "v" }, "d", function()
+  return vim.v.register == '"' and '"_d' or "d"
+end, { expr = true, desc = "Delete without copying" })
+
+vim.keymap.set({ "n", "v" }, "D", function()
+  return vim.v.register == '"' and '"_D' or "D"
+end, { expr = true, desc = "Delete to EOL without copying" })
+
+vim.keymap.set({ "n", "v" }, "x", function()
+  return vim.v.register == '"' and '"_x' or "x"
+end, { expr = true, desc = "Delete character without copying" })
 
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- EXTRA / QUALITY-OF-LIFE

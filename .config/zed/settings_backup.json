@@ -1,0 +1,246 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette
+{
+  // "assistant": {
+  //   "default_model": {
+  //     "provider": "anthropic",
+  //     "model": "claude-3-5-haiku-latest"
+  //   },
+  //   "version": "3"
+  // },
+  "base_keymap": "VSCode",
+  "edit_predictions": {
+    "disabled_globs": [
+      ".gitignore",
+      "node_modules",
+      "dist",
+      "build",
+      "target",
+      "vendor",
+      "out",
+      "public",
+      "docs",
+      "test",
+      "tests",
+      "vendor"
+    ],
+    "mode": "eager_preview"
+  },
+  "assistant": {
+    "default_model": {
+      "provider": "zed.dev",
+      "model": "claude-3-7-sonnet-latest"
+    },
+    "version": "2"
+  },
+  "icon_theme": "Catppuccin Latte",
+  "project_panel": {
+    "dock": "right"
+  },
+
+  "vim_mode": true,
+  "theme": {
+    "mode": "dark",
+    "light": "One Light",
+    "dark": "SynthWave 84 Dark"
+  },
+
+  "toolbar": {
+    // Whether to show breadcrumbs.
+    "breadcrumbs": false,
+    // Whether to show quick action buttons.
+    "quick_actions": false,
+    // Whether to show the Selections menu in the editor toolbar
+    "selections_menu": true
+  },
+
+  "ui_font_size": 20,
+  "ui_font_family": "SF Pro Text",
+  "buffer_font_size": 20.0,
+  "buffer_font_family": "FiraCode Nerd Font",
+  // "buffer_font_family": "Dank Mono",
+
+  "buffer_font_weight": 400,
+  "buffer_line_height": {
+    "custom": 1.5
+  },
+  "relative_line_numbers": true,
+  // "tab_bar": {
+  //   "show_nav_history_buttons": false
+  // },
+
+  "gutter": {
+    // "line_numbers": false,
+    "folds": true,
+    "code_actions": false,
+    "runnables": false
+  },
+
+  "tab_bar": {
+    // Whether or not to show the tab bar in the editor
+    "show": false,
+    // Whether or not to show the navigation history buttons.
+    "show_nav_history_buttons": true,
+    /// Whether or not to show the tab bar buttons.
+    "show_tab_bar_buttons": true
+  },
+  "tabs": {
+    "file_icons": true,
+    "git_status": true
+  },
+  // "inlay_hints": {
+  //   "enabled": false,
+  //   "font_family": "Consolas"
+  // },
+  "indent_guides": {
+    "enabled": false
+    // "coloring": "indent_aware"
+  },
+  "soft_wrap": "editor_width",
+  "tab_size": 2,
+  "format_on_save": "on",
+  "experimental.theme_overrides": {
+    "syntax": {
+      "comment": {
+        "font_family": "Inter",
+        "font_style": "italic",
+        "font_weight": 400
+      }
+    }
+  },
+  "vertical_scroll_margin": 10,
+  // "restore_on_startup": "",
+  "extend_comment_on_newline": false,
+  "file_types": {
+    "C++": ["c", "h", "cpp", "hpp"],
+    "*.mdx": ["markdown"]
+  },
+  "file_scan_exclusions": [
+    "**/.git",
+    "**/.svn",
+    "**/.hg",
+    "**/CVS",
+    "**/.DS_Store",
+    "**/Thumbs.db",
+    "**/.classpath",
+    "**/.settings",
+    "**/vendor",
+    "**/.tmp*"
+  ],
+  "search.exclude": {
+    "**/*.snap": true,
+    "**/.git": true,
+    "**/.github": false,
+    "**/.nuxt": true,
+    "**/.output": true,
+    "**/.pnpm": true,
+    "**/.vscode": true,
+    "**/.yarn": true,
+    "**/node_modules": true,
+    "**/out/**": true,
+    "**/package-lock.json": true,
+    "**/pnpm-lock.yaml": true,
+    "**/temp": true,
+    "**/yarn.lock": true,
+    "**/CHANGELOG*": true,
+    "**/LICENSE*": true
+  },
+  "terminal": {
+    "font_family": "FiraCode Nerd Font",
+    "toolbar": {
+      "title": false
+    },
+    "copy_on_select": true
+  },
+
+  // Previous settings remain the same until git section
+  "git": {
+    "enabled": true,
+    "autoFetch": true,
+    "autoFetchInterval": 300,
+    "autoFetchOnFocus": true,
+    "autoFetchOnWindowChange": true,
+    "autoFetchOnBuild": true,
+    "git_status": true,
+    "autoFetchOnBuildEvents": ["build", "run", "debug"],
+    "autoFetchOnBuildEventsDelay": 1500,
+    "autoFetchOnBuildDelay": 1500,
+    "git_gutter": "tracked_files",
+    "inline_blame": {
+      "enabled": true,
+      "position": "right"
+    }
+  },
+  "languages": {
+    "Go": {
+      "code_actions_on_format": {
+        "source.organizeImports": true
+      }
+    },
+    "Rust": {
+      "tab_size": 4
+    },
+    "TSX": {
+      "formatter": {
+        "external": {
+          "command": "prettier",
+          "arguments": ["--stdin-filepath", "{buffer_path}"]
+        }
+      },
+      "code_actions_on_format": {
+        "source.organizeImports": true,
+        "source.fixAll.eslint": false
+      }
+    },
+    "JavaScript": {
+      "formatter": {
+        "external": {
+          "command": "prettier",
+          "arguments": ["--stdin-filepath", "{buffer_path}"]
+        }
+      },
+      "code_actions_on_format": {
+        "source.fixAll.eslint": false
+      }
+    },
+    "TypeScript": {
+      "formatter": {
+        "external": {
+          "command": "prettier",
+          "arguments": ["--stdin-filepath", "{buffer_path}"]
+        }
+      },
+      "code_actions_on_format": {
+        "source.organizeImports": true,
+        "source.fixAll.eslint": false
+      }
+    }
+  },
+  "lsp": {
+    "rust-analyzer": {
+      "initialization_options": {
+        "checkOnSave": {}
+      }
+    },
+    "eslint": {
+      "settings": {
+        "codeActionOnSave": {
+          "rules": ["import/order"]
+        }
+      }
+    }
+  },
+  // "telemetry": {
+  //   "diagnostics": false,
+  //   "metrics": false
+  // },
+  "features": {
+    "edit_prediction_provider": "supermaven"
+  }
+}
