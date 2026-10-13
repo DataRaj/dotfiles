@@ -81,36 +81,36 @@ countdown() {
 
 # take shots
 shotnow() {
-	cd ${dir} && grim - | tee "$file" | wl-copy
-	sleep 2
+	cd ${dir} && grim -t png "$file" && wl-copy --type image/png < "$file"
+	sleep 1
 	notify_view
 }
 
 shot5() {
 	countdown '5'
-	sleep 1 && cd ${dir} && grim - | tee "$file" | wl-copy
+	sleep 1 && cd ${dir} && grim -t png "$file" && wl-copy --type image/png < "$file"
 	sleep 1
 	notify_view
 }
 
 shot10() {
 	countdown '10'
-	sleep 1 && cd ${dir} && grim - | tee "$file" | wl-copy
+	sleep 1 && cd ${dir} && grim -t png "$file" && wl-copy --type image/png < "$file"
 	notify_view
 }
 
 shotwin() {
 	w_pos=$(hyprctl activewindow | grep 'at:' | cut -d':' -f2 | tr -d ' ' | tail -n1)
 	w_size=$(hyprctl activewindow | grep 'size:' | cut -d':' -f2 | tr -d ' ' | tail -n1 | sed s/,/x/g)
-	cd ${dir} && grim -g "$w_pos $w_size" - | tee "$file" | wl-copy
+	cd ${dir} && grim -t png -g "$w_pos $w_size" "$file" && wl-copy --type image/png < "$file"
 	notify_view
 }
 
 shotarea() {
-	tmpfile=$(mktemp)
-	grim -g "$(slurp)" - >"$tmpfile"
+	tmpfile=$(mktemp --suffix=.png)
+	grim -t png -g "$(slurp -d)" "$tmpfile"
 	if [[ -s "$tmpfile" ]]; then
-		wl-copy <"$tmpfile"
+		wl-copy --type image/png < "$tmpfile"
 		mv "$tmpfile" "$dir/$file"
 	fi
 	notify_view
@@ -121,14 +121,21 @@ shotactive() {
     active_window_file="Screenshot_${time}_${active_window_class}.png"
     active_window_path="${dir}/${active_window_file}"
 
-    hyprctl -j activewindow | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"' | grim -g - "${active_window_path}"
+    if command -v hyprshot >/dev/null 2>&1; then
+        hyprshot -m window -m active -o "${dir}" -f "${active_window_file}" --silent
+    else
+        hyprctl -j activewindow | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"' | grim -t png -g - "${active_window_path}"
+    fi
+    if [[ -f "${active_window_path}" ]]; then
+        wl-copy --type image/png < "${active_window_path}"
+    fi
 	sleep 1
     notify_view "active"
 }
 
 shotswappy() {
-	tmpfile=$(mktemp)
-	grim -g "$(slurp)" - >"$tmpfile" && notify_view "swappy"
+	tmpfile=$(mktemp --suffix=.png)
+	grim -t png -g "$(slurp -d)" "$tmpfile" && notify_view "swappy"
 }
 
 if [[ ! -d "$dir" ]]; then

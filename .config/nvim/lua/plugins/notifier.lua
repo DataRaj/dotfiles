@@ -9,9 +9,13 @@ return {
     "folke/snacks.nvim",
     opts = {
       notifier = {
-        timeout = 6000, -- ms before a notification auto-dismisses (default 3000)
+        timeout = 1500, -- fast dismiss (1.5s instead of 6s)
         style = "compact",
+        width = { min = 20, max = 0.35 }, -- keep it small/compact
+        height = { min = 1, max = 0.25 },
+        top_down = false, -- position at bottom-right corner so it never blocks active editing
       },
     },
   },
 }
+

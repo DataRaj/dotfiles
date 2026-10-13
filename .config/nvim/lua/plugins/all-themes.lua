@@ -113,7 +113,7 @@ return {
           -- ==================================================================
 
           -- Background
-          local bg = "#161A18"
+          local bg = "#040f13"
           local bg_float = "#1A1415"
           local cursorln = "#142123"
           local bg_visual = "#2B3030"
@@ -430,6 +430,20 @@ return {
           -- Constructors / types
           hl["@constructor"] = {
             fg = type_fg,
+          }
+
+          -- ==================================================================
+          -- LSP SEMANTIC TOKENS
+          -- ==================================================================
+
+          hl["@lsp.typemod.variable.readonly"] = {
+            link = "@constant",
+          }
+          hl["@lsp.typemod.variable.static"] = {
+            link = "@constant",
+          }
+          hl["@lsp.type.enumMember"] = {
+            link = "@constant",
           }
 
           -- ==================================================================

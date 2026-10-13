@@ -29,14 +29,39 @@ HISTSIZE=10000
 SAVEHIST=10000
 setopt appendhistory
 
+# --- Wayland Display Detection (Fix for tmux & nested shells) ---
+if [[ -z "$WAYLAND_DISPLAY" || ! -S "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/$WAYLAND_DISPLAY" ]]; then
+    _rdir="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+    for _sock in "$_rdir"/wayland-[0-9]*(N); do
+        if [[ -S "$_sock" ]]; then
+            export WAYLAND_DISPLAY="${_sock:t}"
+            [[ ! -e "$_rdir/wayland-0" ]] && ln -sf "$_sock" "$_rdir/wayland-0" 2>/dev/null
+            break
+        fi
+    done
+    unset _rdir _sock
+fi
+
 # --- Aliases ---
 alias ls='eza -a --icons'
 alias ll='eza -al --icons'
 alias lt='eza -a --tree --level=1 --icons'
 alias vim='nvim'
 alias tree='find . -print | sed -e "s;[^/]*/;|____;g;s;____|; |;g"'
-alias cpath='pwd | wl-copy'
-alias tw='tmux-work'
+cpath() {
+    if [[ -z "$WAYLAND_DISPLAY" || ! -S "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/$WAYLAND_DISPLAY" ]]; then
+        local _r="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+        for _s in "$_r"/wayland-[0-9]*(N); do
+            if [[ -S "$_s" ]]; then
+                export WAYLAND_DISPLAY="${_s:t}"
+                [[ ! -e "$_r/wayland-0" ]] && ln -sf "$_s" "$_r/wayland-0" 2>/dev/null
+                break
+            fi
+        done
+    fi
+    pwd | wl-copy "$@"
+}
+alias twmux='tmux-work'
 
 # --- Waydroid Shortcuts ---
 alias waystart="waydroid session start"
@@ -162,13 +187,13 @@ gss() {
 export PATH="/home/dataraj/.local/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 
-# 1. Change the system interrupt key to Ctrl+D instead of Ctrl+C
-stty intr '^X'
+# Cancel current command line and start fresh prompt on Ctrl+X
+ctrl_x_cancel() {
+  BUFFER=""
+  zle accept-line
+}
+zle -N ctrl_x_cancel
+bindkey '^X' ctrl_x_cancel
 
-# 2. Re-assign the End-of-File (EOF) action to Ctrl+X so you don't break standard shell reads
-stty eof '^D'
-
-# 3. Optional: Allow typing 'exit' or Ctrl+X to close the shell, since Ctrl+D is now 'cancel'
-setopt IGNORE_EOF
 alias config='/usr/bin/git --git-dir=/home/dataraj/.cfg/ --work-tree=/home/dataraj'
 alias ts='~/.tmux/plugins/tmux-resurrect/scripts/save.sh && cp ~/.tmux/resurrect/last ~/.tmux/resurrect/$(tmux display-message -p "#S") && echo "Profile updated!"'

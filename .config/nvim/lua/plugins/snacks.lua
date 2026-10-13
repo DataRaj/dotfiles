@@ -1,4 +1,3 @@
--- lua/plugins/snacks-image.lua
 return {
   "folke/snacks.nvim",
   opts = {
@@ -12,6 +11,22 @@ return {
       },
       -- file opener: show image when opening image file directly
       bo = { filetype = "image" },
+    },
+    picker = {
+      win = {
+        input = {
+          keys = {
+            ["<a-h>"] = { "toggle_hidden", mode = { "i", "n" }, desc = "Toggle hidden files" },
+            ["<c-.>"] = { "toggle_hidden", mode = { "i", "n" }, desc = "Toggle hidden files" },
+          },
+        },
+        list = {
+          keys = {
+            ["H"] = { "toggle_hidden", mode = { "n" }, desc = "Toggle hidden files" },
+            ["<a-h>"] = { "toggle_hidden", mode = { "n" }, desc = "Toggle hidden files" },
+          },
+        },
+      },
     },
   },
 }

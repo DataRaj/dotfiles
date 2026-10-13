@@ -208,20 +208,12 @@ vim.keymap.set("n", "<leader>c[", "ct]", { desc = "Change till ]" })
 --   ca(  ca{  ca[         — change around
 
 -- ── Delete without copying (black-hole register) ─────────────────────────────
--- Normal and Visual mode: deleting via `d`, `dd`, `di(`, `dw`, `D`, `x`, etc.
--- removes text without clobbering whatever you previously yanked/copied.
--- If an explicit register is supplied (e.g. "a or "+), it respects that register.
-vim.keymap.set({ "n", "v" }, "d", function()
-  return vim.v.register == '"' and '"_d' or "d"
-end, { expr = true, desc = "Delete without copying" })
-
-vim.keymap.set({ "n", "v" }, "D", function()
-  return vim.v.register == '"' and '"_D' or "D"
-end, { expr = true, desc = "Delete to EOL without copying" })
-
-vim.keymap.set({ "n", "v" }, "x", function()
-  return vim.v.register == '"' and '"_x' or "x"
-end, { expr = true, desc = "Delete character without copying" })
+-- Normal and Visual mode: deleting via `d`, `dd`, `da"`, `di(`, `dw`, `D`, `x`
+-- strictly removes text without copying or clobbering your clipboard.
+-- `c` (change: ca", ci", cw, etc.) still functions normally.
+vim.keymap.set({ "n", "v" }, "d", '"_d', { desc = "Delete without copying" })
+vim.keymap.set({ "n", "v" }, "D", '"_D', { desc = "Delete to EOL without copying" })
+vim.keymap.set({ "n", "v" }, "x", '"_x', { desc = "Delete character without copying" })
 
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- EXTRA / QUALITY-OF-LIFE
@@ -271,3 +263,88 @@ vim.keymap.set("n", "<C-w>v", "<Cmd>vsplit<CR>", { desc = "Split vertical" })
 -- Built-in Ctrl+A / Ctrl+X work; remap only if needed for insert mode:
 vim.keymap.set("n", "+", "<C-a>", { desc = "Increment number" })
 vim.keymap.set("n", "-", "<C-x>", { desc = "Decrement number" })
+
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- HIDDEN FILES SEARCH & NAVIGATION ("HERE" / CURRENT BUFFER DIRECTORY)
+-- ═══════════════════════════════════════════════════════════════════════════════
+
+-- Helper: Get directory of current active buffer (falls back to cwd)
+local function get_current_buf_dir()
+  local buf = vim.api.nvim_get_current_buf()
+  local name = vim.api.nvim_buf_get_name(buf)
+  if name and name ~= "" then
+    local dir = vim.fs.dirname(name)
+    if dir and vim.fn.isdirectory(dir) == 1 then
+      return dir
+    end
+  end
+  return vim.fn.getcwd()
+end
+
+-- Global toggle state for default search
+local search_hidden_default = false
+
+local function toggle_hidden_default()
+  search_hidden_default = not search_hidden_default
+  local status = search_hidden_default and "ENABLED" or "DISABLED"
+  vim.notify("Search hidden files by default: " .. status, vim.log.levels.INFO, { title = "Picker Settings" })
+end
+
+-- <leader>fh → Find Files including hidden/dotfiles (Root dir)
+vim.keymap.set("n", "<leader>fh", function()
+  local ok, snacks = pcall(require, "snacks")
+  if ok and snacks.picker then
+    snacks.picker.files({ hidden = true })
+  end
+end, { desc = "Find Files (Include hidden/dotfiles)" })
+
+-- <leader>fH → Find Files in cwd including hidden/dotfiles
+vim.keymap.set("n", "<leader>fH", function()
+  local ok, snacks = pcall(require, "snacks")
+  if ok and snacks.picker then
+    snacks.picker.files({ hidden = true, cwd = vim.fn.getcwd() })
+  end
+end, { desc = "Find Files (cwd, hidden)" })
+
+-- <leader>fd or <leader>. → Navigate & Find Files "HERE" (current buffer dir, with hidden files)
+local function find_files_here()
+  local dir = get_current_buf_dir()
+  local ok, snacks = pcall(require, "snacks")
+  if ok and snacks.picker then
+    snacks.picker.files({ cwd = dir, hidden = true })
+  end
+end
+vim.keymap.set("n", "<leader>fd", find_files_here, { desc = "Navigate files HERE (current buffer dir, hidden)" })
+vim.keymap.set("n", "<leader>.", find_files_here, { desc = "Navigate files HERE (current buffer dir, hidden)" })
+
+-- <leader>ed → Open Explorer (NeoTree) rooted in current buffer directory ("HERE")
+vim.keymap.set("n", "<leader>ed", function()
+  local dir = get_current_buf_dir()
+  vim.cmd("Neotree dir=" .. vim.fn.fnameescape(dir) .. " reveal")
+end, { desc = "Explorer HERE (current buffer dir)" })
+
+-- <leader>sh → Live Grep including hidden/dotfiles
+vim.keymap.set("n", "<leader>sh", function()
+  local ok, snacks = pcall(require, "snacks")
+  if ok and snacks.picker then
+    snacks.picker.grep({ hidden = true })
+  end
+end, { desc = "Grep (Include hidden/dotfiles)" })
+
+-- <leader>uh → Toggle hidden files default in search
+vim.keymap.set("n", "<leader>uh", toggle_hidden_default, { desc = "Toggle hidden files default" })
+
+-- Override <leader><space> and <leader>ff to respect global toggle
+vim.keymap.set("n", "<leader><space>", function()
+  local ok, snacks = pcall(require, "snacks")
+  if ok and snacks.picker then
+    snacks.picker.files({ hidden = search_hidden_default })
+  end
+end, { desc = "Find Files (Root Dir)" })
+
+vim.keymap.set("n", "<leader>ff", function()
+  local ok, snacks = pcall(require, "snacks")
+  if ok and snacks.picker then
+    snacks.picker.files({ hidden = search_hidden_default })
+  end
+end, { desc = "Find Files (Root Dir)" })
