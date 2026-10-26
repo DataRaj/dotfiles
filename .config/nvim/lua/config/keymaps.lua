@@ -70,7 +70,11 @@ local function smart_close_buffer()
   end
 end
 
-vim.keymap.set("n", "q", smart_close_buffer, { desc = "Close buffer (layout-safe)" })
+-- NOTE: We deliberately do NOT map plain "q" here.
+-- Neovim uses "q" natively for macro RECORDING (qa, qb, etc.) and
+-- "q:" / "q/" for the command-history window. Overriding "q" breaks both.
+-- Use <leader>q to close the current buffer instead.
+vim.keymap.set("n", "<leader>q", smart_close_buffer, { desc = "Close buffer (layout-safe)" })
 
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- BUFFER NAVIGATION
