@@ -281,8 +281,8 @@ local function get_current_buf_dir()
   return vim.fn.getcwd()
 end
 
--- Global toggle state for default search
-local search_hidden_default = false
+-- Global toggle state for default search (enabled by default)
+local search_hidden_default = true
 
 local function toggle_hidden_default()
   search_hidden_default = not search_hidden_default
@@ -334,17 +334,24 @@ end, { desc = "Grep (Include hidden/dotfiles)" })
 -- <leader>uh → Toggle hidden files default in search
 vim.keymap.set("n", "<leader>uh", toggle_hidden_default, { desc = "Toggle hidden files default" })
 
--- Override <leader><space> and <leader>ff to respect global toggle
+-- <leader><space>, <leader>ff, and <leader>fF search all files (including hidden, respecting .gitignore)
 vim.keymap.set("n", "<leader><space>", function()
   local ok, snacks = pcall(require, "snacks")
   if ok and snacks.picker then
-    snacks.picker.files({ hidden = search_hidden_default })
+    snacks.picker.files({ hidden = true })
   end
-end, { desc = "Find Files (Root Dir)" })
+end, { desc = "Find Files (All, Root Dir)" })
 
 vim.keymap.set("n", "<leader>ff", function()
   local ok, snacks = pcall(require, "snacks")
   if ok and snacks.picker then
-    snacks.picker.files({ hidden = search_hidden_default })
+    snacks.picker.files({ hidden = true })
   end
-end, { desc = "Find Files (Root Dir)" })
+end, { desc = "Find Files (All, Root Dir)" })
+
+vim.keymap.set("n", "<leader>fF", function()
+  local ok, snacks = pcall(require, "snacks")
+  if ok and snacks.picker then
+    snacks.picker.files({ hidden = true, cwd = vim.fn.getcwd() })
+  end
+end, { desc = "Find Files (All, cwd)" })

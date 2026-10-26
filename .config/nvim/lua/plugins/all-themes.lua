@@ -103,6 +103,11 @@ return {
               vim.api.nvim_set_hl(0, group, hl)
             end
           end
+
+          if vim.g.colors_name and (vim.g.colors_name == "thorn" or vim.g.colors_name:find("^thorn")) then
+            vim.g.terminal_color_0 = "#040f13"
+            vim.g.terminal_color_8 = "#568271"
+          end
         end,
       })
 
@@ -114,9 +119,9 @@ return {
 
           -- Background
           local bg = "#040f13"
-          local bg_float = "#1A1415"
-          local cursorln = "#142123"
-          local bg_visual = "#2B3030"
+          local bg_float = "#08181c"
+          local cursorln = "#0c2024"
+          local bg_visual = "#163438"
 
           -- Main text
           local fg = "#e3faf4"
@@ -165,6 +170,31 @@ return {
           hl.FloatTitle = {
             fg = type_fg,
             bg = bg_float,
+          }
+
+          hl.StatusLine = {
+            fg = fg,
+            bg = bg_float,
+          }
+
+          hl.StatusLineNC = {
+            fg = comment,
+            bg = bg,
+          }
+
+          hl.WinBar = {
+            fg = fg,
+            bg = bg,
+          }
+
+          hl.WinBarNC = {
+            fg = comment,
+            bg = bg,
+          }
+
+          hl.WinSeparator = {
+            fg = cursorln,
+            bg = bg,
           }
 
           -- ==================================================================
@@ -474,8 +504,77 @@ return {
             fg = comment,
             bg = "NONE",
           }
+
+          -- ==================================================================
+          -- TERMINAL (<C-/> & Snacks Terminal)
+          -- ==================================================================
+
+          hl.Terminal = { fg = fg, bg = bg }
+          hl.SnacksNormal = { fg = fg, bg = bg }
+          hl.SnacksNormalNC = { fg = fg, bg = bg }
+          hl.SnacksTerminal = { fg = fg, bg = bg }
+          hl.SnacksTerminalNormal = { fg = fg, bg = bg }
+          hl.SnacksTerminalBorder = { fg = type_fg, bg = bg }
+          hl.SnacksTerminalTitle = { fg = keyword, bg = bg, bold = true }
+
+          -- ==================================================================
+          -- TREESITTER CONTEXT
+          -- ==================================================================
+
+          hl.TreesitterContext = { bg = bg_float }
+          hl.TreesitterContextLineNumber = { fg = number_fg, bg = bg_float }
+          hl.TreesitterContextBottom = { sp = type_fg, underline = true }
+
+          -- ==================================================================
+          -- COMMAND LINE & NOICE POPUPS (:)
+          -- ==================================================================
+
+          hl.NoiceCmdline = { fg = fg, bg = bg_float }
+          hl.NoiceCmdlinePopup = { fg = fg, bg = bg_float }
+          hl.NoiceCmdlinePopupBorder = { fg = type_fg, bg = bg_float }
+          hl.NoiceCmdlinePopupTitle = { fg = keyword, bg = bg_float, bold = true }
+          hl.NoiceCmdlinePrompt = { fg = keyword, bg = bg_float }
+          hl.NoicePopup = { fg = fg, bg = bg_float }
+          hl.NoicePopupBorder = { fg = type_fg, bg = bg_float }
+          hl.NoiceConfirm = { fg = fg, bg = bg_float }
+          hl.NoiceConfirmBorder = { fg = type_fg, bg = bg_float }
+          hl.MsgArea = { fg = fg, bg = bg }
+
+          -- ==================================================================
+          -- PICKER, WHICH-KEY & FLOATING WINDOWS
+          -- ==================================================================
+
+          hl.SnacksPicker = { fg = fg, bg = bg_float }
+          hl.SnacksPickerBorder = { fg = type_fg, bg = bg_float }
+          hl.SnacksPickerInput = { fg = fg, bg = bg_float }
+          hl.SnacksPickerInputBorder = { fg = type_fg, bg = bg_float }
+          hl.SnacksPickerList = { fg = fg, bg = bg_float }
+          hl.SnacksPickerPreview = { fg = fg, bg = bg }
+          hl.SnacksPickerBoxTitle = { fg = keyword, bg = bg_float }
+          hl.SnacksPickerInputTitle = { fg = keyword, bg = bg_float }
+
+          hl.WhichKeyNormal = { fg = fg, bg = bg_float }
+          hl.WhichKeyFloat = { fg = fg, bg = bg_float }
+          hl.WhichKeyBorder = { fg = type_fg, bg = bg_float }
+          hl.WhichKeyTitle = { fg = keyword, bg = bg_float }
+
+          hl.TelescopeNormal = { fg = fg, bg = bg_float }
+          hl.TelescopeBorder = { fg = type_fg, bg = bg_float }
+          hl.TelescopePromptNormal = { fg = fg, bg = bg_float }
+          hl.TelescopePromptBorder = { fg = type_fg, bg = bg_float }
+          hl.TelescopeResultsNormal = { fg = fg, bg = bg_float }
+          hl.TelescopeResultsBorder = { fg = type_fg, bg = bg_float }
+          hl.TelescopePreviewNormal = { fg = fg, bg = bg }
+          hl.TelescopePreviewBorder = { fg = type_fg, bg = bg }
+
+          hl.NeoTreeNormal = { fg = fg, bg = bg }
+          hl.NeoTreeNormalNC = { fg = fg, bg = bg }
+          hl.NeoTreeEndOfBuffer = { fg = bg, bg = bg }
         end,
       })
+
+      vim.g.terminal_color_0 = "#040f13"
+      vim.g.terminal_color_8 = "#568271"
     end,
   },
 

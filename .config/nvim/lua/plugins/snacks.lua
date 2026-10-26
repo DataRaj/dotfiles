@@ -13,6 +13,12 @@ return {
       bo = { filetype = "image" },
     },
     picker = {
+      sources = {
+        files = {
+          hidden = true,
+          ignored = false,
+        },
+      },
       win = {
         input = {
           keys = {
