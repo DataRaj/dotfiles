@@ -174,7 +174,7 @@ return {
 
           hl.StatusLine = {
             fg = fg,
-            bg = bg_float,
+            bg = bg,
           }
 
           hl.StatusLineNC = {
