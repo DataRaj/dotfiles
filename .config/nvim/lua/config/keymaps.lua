@@ -26,7 +26,7 @@ local function smart_close_buffer()
 
   -- Ignore special/non-normal buffers (neo-tree, lazy, etc.)
   local cur_ft = vim.api.nvim_get_option_value("filetype", { buf = cur_buf })
-  local skip_fts = { ["neo-tree"] = true, ["lazy"] = true, ["TelescopePrompt"] = true }
+  local skip_fts = { ["neo-tree"] = true, ["Outline"] = true, ["lazy"] = true, ["TelescopePrompt"] = true }
   if skip_fts[cur_ft] then return end
 
   -- Collect all listed, non-current buffers

@@ -16,7 +16,6 @@ return {
     "emrearmagan/atlas.nvim",
     dependencies = {
       "nvim-tree/nvim-web-devicons", -- icons in the dashboard
-      "esmuellert/codediff.nvim",    -- PR diff viewer (already in your config)
     },
     -- Lazy-load: only when an Atlas command is called
     cmd = { "Atlas" },

@@ -104,17 +104,34 @@ return {
             end
           end
 
-          if vim.g.colors_name and (vim.g.colors_name == "thorn" or vim.g.colors_name:find("^thorn")) then
-            vim.g.terminal_color_0 = "#040f13"
-            vim.g.terminal_color_8 = "#568271"
+          if vim.g.colors_name then
+            if vim.g.colors_name == "thorn-light" or vim.g.colors_name == "thorn-field" then
+              vim.g.terminal_color_0 = "#1A2B23"
+              vim.g.terminal_color_8 = "#667F6D"
+            elseif vim.g.colors_name == "thorn-violet" then
+              vim.g.terminal_color_0 = "#120D18"
+              vim.g.terminal_color_8 = "#826F98"
+            elseif vim.g.colors_name == "thorn" or vim.g.colors_name:find("^thorn") then
+              vim.g.terminal_color_0 = "#040f13"
+              vim.g.terminal_color_8 = "#568271"
+            end
           end
         end,
       })
 
       require("thorn").setup({
+        theme = "forest",
         on_highlights = function(hl, palette)
+          -- When loading Thorn's light variant ("field" / "thorn-light"),
+          -- apply the structured light palette instead of the dark emerald overrides.
+          if palette and palette.bg == "#F9FDCE" then
+            local tp = require("config.theme.thorn_palette")
+            tp.apply(hl, tp.palettes.light)
+            return
+          end
+
           -- ==================================================================
-          -- PALETTE
+          -- PALETTE (DARK EMERALD)
           -- ==================================================================
 
           -- Background

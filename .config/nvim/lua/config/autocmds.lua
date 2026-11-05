@@ -52,17 +52,34 @@ vim.api.nvim_create_autocmd("VimEnter", {
 local INACTIVE_BLEND = 15
 local SKIP_FT = {
   ["neo-tree"] = true,
+  ["Outline"] = true,
+  ["diffbandit-hex"] = true,
+  ["diffbandit-help"] = true,
   ["TelescopePrompt"] = true,
   ["lazy"] = true,
   ["noice"] = true,
   ["notify"] = true,
 }
 
+local function is_diffbandit_tab(win)
+  local db_state = package.loaded["diffbandit.state"]
+  if not db_state then return false end
+  local tab = vim.api.nvim_win_get_tabpage(win)
+  return (db_state.sessions and db_state.sessions[tab] ~= nil)
+    or (db_state.panels and db_state.panels[tab] ~= nil)
+    or (db_state.merges and db_state.merges[tab] ~= nil)
+    or (db_state.folders and db_state.folders[tab] ~= nil)
+end
+
 local function set_blend(win, val)
   if not vim.api.nvim_win_is_valid(win) then return end
   -- Never touch floating windows
   local cfg = vim.api.nvim_win_get_config(win)
   if cfg.relative ~= "" then return end
+  if is_diffbandit_tab(win) then
+    pcall(vim.api.nvim_set_option_value, "winblend", 0, { win = win })
+    return
+  end
   local buf = vim.api.nvim_win_get_buf(win)
   local ft = vim.bo[buf].filetype
   if SKIP_FT[ft] then return end
