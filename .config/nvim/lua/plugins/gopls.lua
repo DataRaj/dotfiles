@@ -18,6 +18,12 @@ return {
           settings = {
             gopls = {
               buildFlags = { "-tags=test,gold" },
+              -- Native gopls deep completion & fuzzy matching (works directly with blink.cmp)
+              deepCompletion = true,
+              completeUnimported = true,
+              usePlaceholders = true,
+              matcher = "Fuzzy",
+              symbolMatcher = "FastFuzzy",
             },
           },
         },
