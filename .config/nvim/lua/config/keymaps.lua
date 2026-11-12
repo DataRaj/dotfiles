@@ -359,3 +359,13 @@ vim.keymap.set("n", "<leader>fF", function()
     snacks.picker.files({ hidden = true, cwd = vim.fn.getcwd() })
   end
 end, { desc = "Find Files (All, cwd)" })
+
+-- ── Quick Dark / Light Theme Toggle (Neovim `thorn` <-> `thorn-light` + Tmux) ─
+vim.keymap.set("n", "<leader>uT", function()
+  require("utils.tmux_theme").toggle()
+end, { desc = "Toggle Dark/Light Theme (Thorn + Tmux)" })
+
+vim.keymap.set("n", "<leader>ub", function()
+  require("utils.tmux_theme").toggle()
+end, { desc = "Toggle Dark/Light Theme (Thorn + Tmux)" })
+

@@ -17,6 +17,9 @@ vim.api.nvim_create_autocmd("ColorScheme", {
   group = vim.api.nvim_create_augroup("ThemeCachePersist", { clear = true }),
   callback = function(ev)
     require("utils.theme_cache").save(ev.match)
+    pcall(function()
+      require("utils.tmux_theme").sync_tmux(ev.match)
+    end)
     local hl_groups = vim.fn.getcompletion("", "highlight")
 
     for _, group in ipairs(hl_groups) do

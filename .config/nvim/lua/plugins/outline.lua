@@ -1,6 +1,6 @@
--- ── outline.nvim: GitHub / VS Code-style Left Symbol Outline Sidebar ─────────
+-- ── outline.nvim: VS Code / IDE-style Right Symbol Outline Sidebar ───────────
 -- Features:
---   - Docked on the LEFT side (width = 28), complementing Neo-tree on the right
+--   - Docked on the RIGHT side (width = 28), complementing Neo-tree on the left
 --   - Lists functions, methods, structs, interfaces, fields, and constants
 --   - Automatically groups `const (...)` / `var (...)` blocks and consecutive
 --     constant/variable bunches into collapsible tree folders
@@ -8,17 +8,28 @@
 --   - Auto-highlights the active symbol as you move through your code buffer
 
 return {
+  -- Prevent Trouble from hijacking <leader>cs (which previously opened Trouble
+  -- with focus=false instead of Outline)
+  {
+    "folke/trouble.nvim",
+    optional = true,
+    keys = {
+      { "<leader>cs", false },
+      { "<leader>cS", "<cmd>Trouble symbols toggle<cr>", desc = "Symbols (Trouble)" },
+    },
+  },
+
   {
     "hedyhli/outline.nvim",
     lazy = true,
     cmd = { "Outline", "OutlineOpen", "OutlineClose", "OutlineFocus" },
     keys = {
-      { "<leader>co", "<cmd>Outline<cr>", desc = "Toggle Code Outline (Left Sidebar)" },
-      { "<leader>cs", "<cmd>Outline<cr>", desc = "Toggle Symbols Outline (Left Sidebar)" },
+      { "<leader>co", "<cmd>Outline<cr>", desc = "Toggle Code Outline (Right Sidebar)" },
+      { "<leader>cs", "<cmd>Outline<cr>", desc = "Toggle Symbols Outline (Right Sidebar)" },
     },
     opts = {
       outline_window = {
-        position = "left",
+        position = "right",
         width = 28,
         relative_width = false,
         auto_width = {
@@ -290,7 +301,7 @@ return {
           --   - Clicking the fold chevron toggles fold
           --   - Clicking a symbol name jumps to that symbol in the code window ("href" behavior)
           vim.keymap.set("n", "<LeftRelease>", function()
-            local sb = outline.sidebar
+            local sb = outline._get_sidebar and outline._get_sidebar() or outline.current
             if not sb or not sb.view or not sb.view:is_open() then
               return
             end
@@ -316,7 +327,7 @@ return {
 
           -- Double-click jumps and focuses the code window
           vim.keymap.set("n", "<2-LeftMouse>", function()
-            local sb = outline.sidebar
+            local sb = outline._get_sidebar and outline._get_sidebar() or outline.current
             if sb and sb.view and sb.view:is_open() then
               sb:_goto_location(true)
             end

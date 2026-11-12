@@ -39,6 +39,20 @@ return {
         end,
         desc = "Theme Picker",
       },
+      {
+        "<leader>uT",
+        function()
+          require("utils.tmux_theme").toggle()
+        end,
+        desc = "Toggle Dark/Light Theme (Thorn + Tmux)",
+      },
+      {
+        "<leader>ub",
+        function()
+          require("utils.tmux_theme").toggle()
+        end,
+        desc = "Toggle Dark/Light Theme (Thorn + Tmux)",
+      },
     },
   },
 }

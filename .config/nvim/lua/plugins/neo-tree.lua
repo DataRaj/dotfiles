@@ -2,14 +2,14 @@ return {
   {
     "nvim-neo-tree/neo-tree.nvim",
     opts = {
-      -- Place neo-tree on the right side permanently
-      position = "right",
+      -- Place neo-tree on the left side permanently (standard IDE layout)
+      position = "left",
       window = {
-        -- Hard-lock sidebar to 25 columns on the right.
+        -- Hard-lock sidebar to 25 columns on the left.
         -- Do NOT use a function here — function-width is re-evaluated on
         -- every WinResized event and is the primary cause of the sidebar
         -- blowing out to full width when splits are opened/closed.
-        position = "right",
+        position = "left",
         width = 25,
       },
       filesystem = {
